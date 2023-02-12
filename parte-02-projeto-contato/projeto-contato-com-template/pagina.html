@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,400;0,700;1,200;1,800&display=swap"
+            rel="stylesheet">
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/button.css">
+    <link rel="stylesheet" href="css/records.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="icon" href="images/favicon-1.png">
+    
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/contato.js" defer></script>
+
+    <title>Contatos</title>
+</head>
+<style>
+     /*####################->HEADER<-#####################*/
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+    }
+
+    .header {
+        width: 100vw;
+        background-color: var(--primary-color);
+        border-bottom: 1px solid white;
+        line-height: 40px;
+        position: fixed;
+        top: 0;
+    }
+    
+    .header ul {
+        display: flex;
+        gap:10px;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        background-color: var(--primary-color);
+    }
+
+    .header ul li {
+        list-style: none;
+        background-color: aquamarine;
+        border-radius: 3px;
+        padding: 2px;
+        transition: box-shadow .6s ease;
+    }
+    
+    .header ul li:hover {
+        background-color: aqua;
+        cursor: pointer;
+        box-shadow: inset 200px 0 0 #00000055;
+    }
+    
+    /*Controla o menu*/
+    .menu {
+        list-style:none;
+        /**border:1px solid #c0c0c0; */
+        border:1px solid black;
+        float:left;
+        background-color: var(--primary-color);
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .menu li {
+        position:relative;
+        float:left;
+        border:1px solid white;
+        padding: 2px;
+        width: 100px;
+    }
+
+    .menu li ul {
+        position:absolute;
+        left:0;
+        background-color:aqua;
+        display:none;
+    }
+
+    /*mostra o menu no hover*/
+    .menu li:hover ul, .menu li.over ul {
+        display:flex;
+        flex-direction: column;
+    }
+
+    .menu li ul li{
+        border:1px solid #c0c0c0;
+        display:block;
+        width:150px;
+    }
+
+    /*####################->FOOTER<-#####################*/
+    .footer {
+        width: 100vw;
+        height: 40px;
+        background-color: var(--primary-color);
+        position: fixed;
+        bottom: 0;
+        color: black;
+        font-size:12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .sub-menu {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .header-title {
+        width: 100%;
+    }
+    
+    main {
+        width: 90%;
+        height: 80%;
+        flex-grow: 1;
+    }
+    
+    .header-title-consulta {
+        width: 100%;
+    }
+</style>
+<body>
+    <header class="header">
+        <ul class="menu">
+            <li>Home</li>
+            <li>Produtos</li>
+            <li>Serviços</li>
+            <li>Contato</li>
+            <li>Login</li>
+            <!--<li>Config
+                <ul>
+                    <li>Admin</li>
+                    <li>Usuarios</li>
+                    <li>Relatorios</li>
+                </ul>
+            </li> -->
+        </ul>
+    </header><main class="sub-menu">
+                <header class="header-title-consulta">
+                    <h1 class="header-title">Contatos</h1>
+                </header>
+                <section class="acoes">
+                    <button type="button" class="button blue mobile" id="cadastrarCliente">Incluir</button>
+                    <button type="button" class="button green" id="consultarDadosCliente">Consultar</button>
+                    <button type="button" class="button red" id="limparDadosCliente">Limpar Consulta</button>
+                </section>
+            <table id="tableDados" class="records"><thead>    <tr>    <th>Id</th>    <th>Nome</th>    <th>Sobrenome</th>    <th>Endereco</th>    <th>Telefone</th>    <th>E-mail</th>    <th>Nascimento</th>    <th colspan='2'>Ações</th>    </tr></thead><tbody><tr><td>1</td><td>João-8912</td><td>SOBRENOME</td><td>ENDERECO</td><td>479885454</td><td>jsilva@mail.com</td><td>1986-07-19</td><td>
+                        <button type="button" class="button green" onclick="editarContato(1)">Editar</button>
+                   </td>
+                   <td>
+                        <button type="button" class="button red" onclick="excluirContato(1)">Excluir</button>
+                    </td></tr><tr><td>16</td><td>Joao48</td><td>da Silva</td><td>Estrada Porto Rico</td><td>(47)98854-7844</td><td>joao@email.com</td><td>1986/07/19</td><td>
+                        <button type="button" class="button green" onclick="editarContato(16)">Editar</button>
+                   </td>
+                   <td>
+                        <button type="button" class="button red" onclick="excluirContato(16)">Excluir</button>
+                    </td></tr><tr><td>17</td><td>Joao4891</td><td>da Silva</td><td>Estrada Porto Rico</td><td>(47)98854-7844</td><td>joao@email.com</td><td>1986/07/19</td><td>
+                        <button type="button" class="button green" onclick="editarContato(17)">Editar</button>
+                   </td>
+                   <td>
+                        <button type="button" class="button red" onclick="excluirContato(17)">Excluir</button>
+                    </td></tr><tr><td>18</td><td>Joao78</td><td>da Silva</td><td>Estrada Porto Rico</td><td>(47)98854-7844</td><td>joao@email.com</td><td>1986/07/19</td><td>
+                        <button type="button" class="button green" onclick="editarContato(18)">Editar</button>
+                   </td>
+                   <td>
+                        <button type="button" class="button red" onclick="excluirContato(18)">Excluir</button>
+                    </td></tr><tr><td>19</td><td>Joao78</td><td>da Silva</td><td>Estrada Porto Rico</td><td>(47)98854-7844</td><td>joao@email.com</td><td>1986/07/19</td><td>
+                        <button type="button" class="button green" onclick="editarContato(19)">Editar</button>
+                   </td>
+                   <td>
+                        <button type="button" class="button red" onclick="excluirContato(19)">Excluir</button>
+                    </td></tr></tbody></table><div class="modal" id="modal">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h2>Contatos</h2>
+                    <span class="modal-close" id="modalClose">&#10006;</span>
+                </header>
+                <h1>Manutençaõ não implementada ainda</h1>
+                <form action="#">
+                    <input type="hidden" id="id" class="modal-field" placeholder="Id">
+                    <input type="text" id="nome" data-index="new" class="modal-field" placeholder="Nome do Cliente" required value="Joao">
+                </form>
+                <footer class="modal-footer" id="modal-footer">
+                    <button id="salvar" class="button green">Salvar</button>
+                    <button id="cancelar" class="button blue">Cancelar</button>
+                </footer>
+            </div>
+        </div></main><footer class="footer">
+                <h4>Copyright ©2023 All rights reserved | Professor Gelvazio Camargo - Senac</h4>
+            </footer>

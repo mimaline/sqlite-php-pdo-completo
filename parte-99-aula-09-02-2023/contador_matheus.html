@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Manga</h1>
+    <h1>Manga-API</h1>
+    <a href="https://github.com/nezzzumi/mangalivre-api">Manga-API</a>
+    <h2>Contador: <span id="contador">0</span></h2>
+    <h4>Site Manga:</h4>
+    <iframe src="https://mangalivre.net/ler/one-punch-man/online/399519/175" width="300" height="300" cross-origin="*">
+        <p>Your browser does not support iframes.</p>
+    </iframe>
+
+    <h6>Outro</h6>
+    <embed type="text/html" src="https://mangalivre.net/ler/one-punch-man/online/41252/2" width="500" height="200">
+
+    <frameset onload="this.focus()" onblur="this.focus()">
+        <!-- frame which embeds example.com login page -->
+        <frame src="https://mangalivre.net/ler/one-punch-man/online/399519/175">
+    </frameset>
+</body>
+
+<script defer>
+    let contador = localStorage.getItem('db_contador') ?? 0;
+
+    contador = parseInt(contador);
+
+    if(contador == 0){
+        contador = 1;
+        localStorage.setItem("db_contador", contador);
+    } else {
+        contador = contador + 1;
+        localStorage.setItem("db_contador", contador);
+    }
+    
+    document.querySelector("#contador").innerHTML = contador;
+
+    // Chamando uma nova url
+
+    let nova_url = "http://127.0.0.1:5500/index.html?contador=" + contador;
+
+
+    let url_manga = "https://mangalivre.net/ler/one-punch-man/online/41252/2";
+
+    //window.location.href = nova_url;
+
+    
+</script>
+</html>
