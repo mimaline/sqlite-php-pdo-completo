@@ -57,6 +57,8 @@ class ManutencaoPadrao {
         $query = "DELETE FROM `contato` WHERE `contato_id` = :contato_id";
     
         $this->executaQueryComParametros($query, $registro, $chave = true, $isExclusao = true);
+    
+        echo json_encode($registro);
     }
     
     protected function executaAlteracao() {
