@@ -1,9 +1,15 @@
 <?php
 require_once 'conexao.php';
 
-class ManutencaoPadrao {
+abstract class ManutencaoPadrao {
     
     protected $pdo;
+    
+    // METODOS ABAIXO DEVEM SER IMPLEMENTADOS NAS CLASSES FILHAS - INICIO..
+    protected abstract function getNomeTabela();
+    protected abstract function getNomeColunaChave();
+    protected abstract function getColunasTabela();
+    // METODOS ABAIXO DEVEM SER IMPLEMENTADOS NAS CLASSES FILHAS - FIM
     
     public function __construct() {
         $this->setConexao();
@@ -46,13 +52,15 @@ class ManutencaoPadrao {
         
         echo json_encode($aDados);
     }
-    
+
     protected function buscaDadosAlteracao() {
-        $registro = json_decode($_POST["contato"], true);
+        $registro = json_decode($_POST[$this->getNomeTabela()], true);
+    
+        list($paramkey, $IdTabela) = $this->getChaves();
         
-        $contato_id = $registro["id"];
+        $chave = $registro[$IdTabela];
         
-        $aDados = $this->getDadosFromBancoDados($contato_id);
+        $aDados = $this->getDadosFromBancoDados($chave);
         
         echo json_encode($aDados);
     }
@@ -79,7 +87,7 @@ class ManutencaoPadrao {
     }
     
     protected function executaExclusao() {
-        $registro = json_decode($_POST["contato"], true);
+        $registro = json_decode($_POST[$this->getNomeTabela()], true);
         
         $query = $this->getSqlExclusao();
     
@@ -89,7 +97,7 @@ class ManutencaoPadrao {
     }
     
     protected function executaAlteracao() {
-        $registro = json_decode($_POST["contato"], true);
+        $registro = json_decode($_POST[$this->getNomeTabela()], true);
 
         $query = $this->getSqlAlteracao();
     
@@ -99,7 +107,7 @@ class ManutencaoPadrao {
     }
     
     protected function executaInclusao() {
-        $registro = json_decode($_POST["contato"], true);
+        $registro = json_decode($_POST[$this->getNomeTabela()], true);
         
         $query = $this->getSqlInclusao();
         
@@ -112,7 +120,9 @@ class ManutencaoPadrao {
         $stmt = $this->pdo->prepare($query);
     
         if($chave){
-            $stmt->bindParam(':contato_id', $registro['id']);
+            list($paramkey, $IdTabela) = $this->getChaves();
+            
+            $stmt->bindParam(':' . $paramkey, $registro[$IdTabela]);
         }
         
         if(!$isExclusao){
@@ -125,31 +135,32 @@ class ManutencaoPadrao {
         $pdo = null;
     }
     
+    protected function getSqlConsultaDados($chave = false){
+        if ($chave) {
+            $nomeColunaChave = $this->getNomeColunaChave();
+            
+            return "SELECT * FROM `" . $this->getNomeTabela() . "` WHERE " . $nomeColunaChave . " = :" . $nomeColunaChave;
+        }
+        return "SELECT * FROM `" . $this->getNomeTabela() . "`";
+    }
+    
+    protected function getSqlExclusao(){
+        $nomeColunaChave = $this->getNomeColunaChave();
+        
+        return "DELETE FROM `" . $this->getNomeTabela() . "` WHERE " . $nomeColunaChave ."= :" . $nomeColunaChave;
+    }
+    
     protected function setParametros($stmt, $registro) {
-        $stmt->bindParam(':nome', $registro['nome']);
-        $stmt->bindParam(':sobrenome', $registro['sobrenome']);
-        $stmt->bindParam(':endereco', $registro['endereco']);
-        $stmt->bindParam(':telefone', $registro['telefone']);
-        $stmt->bindParam(':email', $registro['email']);
-        $stmt->bindParam(':nascimento', $registro['nascimento']);
+        foreach ($this->getColunasTabela() as $campo){
+            $stmt->bindParam(':' . $campo, $registro[$campo]);
+        }
         
         return $stmt;
     }
-
-    protected function getSqlConsultaDados($chave = false){
-        if ($chave) {
-            return "SELECT * FROM `contato` WHERE contato_id = $chave";
-        }
-        return 'SELECT * FROM `contato`';
-    }
-    
-    protected function getSqlInclusao(){
-        return "INSERT INTO `contato` (nome, sobrenome, endereco, telefone, email, nascimento)
-            VALUES(:nome, :sobrenome, :endereco, :telefone, :email, :nascimento)";
-    }
     
     protected function getSqlAlteracao(){
-        return "UPDATE `contato` SET
+        
+        $update_original = "UPDATE `" . $this->getNomeTabela() . "` SET
                        `nome` = :nome,
                        `sobrenome` = :sobrenome,
                        `endereco` = :endereco,
@@ -157,10 +168,50 @@ class ManutencaoPadrao {
                        `email` = :email,
                        `nascimento` = :nascimento
                  WHERE `contato_id` = :contato_id";
+        
+        $listaSet = "";
+        $totalColunas = count($this->getColunasTabela());
+        $contador = 0;
+        foreach ($this->getColunasTabela() as $campo){
+            if($contador == $totalColunas){
+                $listaSet .= "`$campo` = :$campo";
+            } else {
+                $listaSet .= "`$campo` = :$campo,";
+            }
+            
+            $contador++;
+        }
+        
+        $nomeColunaChave = $this->getNomeColunaChave();
+        
+        $sql_update = "UPDATE `" . $this->getNomeTabela() . "` SET";
+        
+        $sql_update .= $listaSet;
+        
+        $sql_update .= "WHERE " . $nomeColunaChave ." = :" . $nomeColunaChave;
+        
+        return $sql_update;
     }
     
-    protected function getSqlExclusao(){
-        return "DELETE FROM `contato` WHERE `contato_id` = :contato_id";
+    protected function getSqlInclusao(){
+        // $sql_insert_original = "INSERT INTO `" . $this->getNomeTabela() . "` (nome, sobrenome, endereco, telefone, email, nascimento)
+        //     VALUES(:nome, :sobrenome, :endereco, :telefone, :email, :nascimento)";
+        
+        $aColunas = $this->getColunasTabela();
+        $aParametros = array();
+        foreach ($aColunas as $campo){
+            array_push($aParametros, ':' . $campo);
+        }
+        
+        $aColunas = implode(",", $aColunas);
+        $aParametros = implode(",", $aParametros);
+        
+        $sql_insert = "INSERT INTO `" . $this->getNomeTabela() . "` ($aColunas)
+                        VALUES($aParametros)";
+        
+        return $sql_insert;
     }
+    
+
     
 }

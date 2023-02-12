@@ -15,7 +15,7 @@ function editarContato(contato_id){
     console.log("Buscando dados para alteracao do registro...");
 
     const contato = {
-        id: contato_id
+        contato_id: contato_id
     };
 
     var oDados = {
@@ -49,7 +49,7 @@ function editarContato(contato_id){
 function excluirContato(contato_id){
     alert("Excluindo registro...");
     const contato = {
-        id: contato_id
+        contato_id: contato_id
     };
 
     loadAjaxUpdateRegistro(contato, "EXECUTA_EXCLUSAO");
