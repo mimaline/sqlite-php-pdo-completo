@@ -1,7 +1,7 @@
 <?php
 require_once 'conexao.php';
 
-class ManutencaoPadrao {
+class ManutencaoPadraoInicial {
     
     public function __construct() {
         $this->processaDados();
