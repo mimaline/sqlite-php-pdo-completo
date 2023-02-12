@@ -6,12 +6,39 @@ class ManutencaoPadrao {
     protected $pdo;
     
     public function __construct() {
+        $this->setConexao();
         $this->processaDados();
     }
     
     protected function setConexao(){
         /** @var PDO $pdo */
         $this->pdo = getConexao();
+    }
+    
+    protected function processaDados() {
+        if (isset($_POST["acao"])) {
+            $acao = $_POST["acao"];
+            
+            switch ($acao) {
+                case "EXECUTA_CONSULTA":
+                    $this->executaConsulta();
+                    break;
+                case "EXECUTA_INCLUSAO":
+                    $this->executaInclusao();
+                    break;
+                case "EXECUTA_ALTERACAO":
+                    $this->executaAlteracao();
+                    break;
+                case "BUSCA_DADOS_ALTERACAO":
+                    $this->buscaDadosAlteracao();
+                    break;
+                case "EXECUTA_EXCLUSAO":
+                    $this->executaExclusao();
+                    break;
+            }
+        } else {
+            echo json_encode(array("mensagem" => "Funcao invalida!"));
+        }
     }
     
     protected function executaConsulta() {
@@ -108,33 +135,7 @@ class ManutencaoPadrao {
         
         return $stmt;
     }
-    
-    protected function processaDados() {
-        if (isset($_POST["acao"])) {
-            $acao = $_POST["acao"];
-            
-            switch ($acao) {
-                case "EXECUTA_CONSULTA":
-                    $this->executaConsulta();
-                    break;
-                case "EXECUTA_INCLUSAO":
-                    $this->executaInclusao();
-                    break;
-                case "EXECUTA_ALTERACAO":
-                    $this->executaAlteracao();
-                    break;
-                case "BUSCA_DADOS_ALTERACAO":
-                    $this->buscaDadosAlteracao();
-                    break;
-                case "EXECUTA_EXCLUSAO":
-                    $this->executaExclusao();
-                    break;
-            }
-        } else {
-            echo json_encode(array("mensagem" => "Funcao invalida!"));
-        }
-    }
-    
+
     protected function getSqlConsultaDados($chave = false){
         if ($chave) {
             return "SELECT * FROM `contato` WHERE contato_id = $chave";
@@ -161,6 +162,5 @@ class ManutencaoPadrao {
     protected function getSqlExclusao(){
         return "DELETE FROM `contato` WHERE `contato_id` = :contato_id";
     }
-    
     
 }
