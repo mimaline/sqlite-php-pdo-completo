@@ -3,15 +3,8 @@ require_once 'conexao.php';
 
 class ManutencaoPadrao {
     
-    protected $pdo;
-    
     public function __construct() {
         $this->processaDados();
-    }
-    
-    protected function setConexao(){
-        /** @var PDO $pdo */
-        $this->pdo = getConexao();
     }
     
     protected function executaConsulta() {
@@ -31,12 +24,19 @@ class ManutencaoPadrao {
     }
     
     protected function getDadosFromBancoDados($chave = false) {
-        $query = $this->getSqlConsultaDados($chave);
-
-        $stmt = $this->pdo->prepare($query);
+        /** @var PDO $pdo */
+        $pdo = getConexao();
+        
+        $query = "SELECT * FROM `contato`";
+        if ($chave) {
+            $query = "SELECT * FROM `contato` WHERE contato_id = $chave";
+        }
+        
+        $stmt = $pdo->prepare($query);
         
         $stmt->execute();
         
+        // percorrer os dados e coloca num array
         $aDados = array();
         while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $aDados[] = $result;
@@ -52,52 +52,65 @@ class ManutencaoPadrao {
     }
     
     protected function executaExclusao() {
+        /** @var PDO $pdo */
+        $pdo = getConexao();
+        
         $registro = json_decode($_POST["contato"], true);
         
+        $contato_id = $registro["id"];
+        
         $query = "DELETE FROM `contato` WHERE `contato_id` = :contato_id";
-    
-        $this->executaQueryComParametros($query, $registro, $chave = true, $isExclusao = true);
+        
+        $stmt = $pdo->prepare($query);
+        
+        $stmt->bindParam(':contato_id', $contato_id, PDO::PARAM_INT);
+        
+        $stmt->execute();
+        
+        $stmt = null;
+        $pdo = null;
     }
     
     protected function executaAlteracao() {
+        
         $registro = json_decode($_POST["contato"], true);
-
+        
+        /** @var PDO $pdo */
+        $pdo = getConexao();
+        
         $query = "UPDATE `contato` SET `nome` = :nome, `sobrenome` = :sobrenome, `endereco` = :endereco, `telefone` = :telefone, `email` = :email, `nascimento` = :nascimento WHERE `contato_id` = :contato_id";
-    
-        $this->executaQueryComParametros($query, $registro, $chave = true);
+        
+        $stmt = $pdo->prepare($query);
+        
+        $stmt->bindParam(':nome', $registro['nome']);
+        $stmt->bindParam(':sobrenome', $registro['sobrenome']);
+        $stmt->bindParam(':endereco', $registro['endereco']);
+        $stmt->bindParam(':telefone', $registro['telefone']);
+        $stmt->bindParam(':email', $registro['email']);
+        $stmt->bindParam(':nascimento', $registro['nascimento']);
+        $stmt->bindParam(':contato_id', $registro['id']);
+        
+        $stmt->execute();
+        
+        $stmt = null;
+        $pdo = null;
         
         echo json_encode($registro);
     }
     
     protected function executaInclusao() {
+        
         $registro = json_decode($_POST["contato"], true);
+        
+        require_once 'conexao.php';
+        /** @var PDO $pdo */
+        $pdo = getConexao();
         
         $query = "INSERT INTO `contato` (nome, sobrenome, endereco, telefone, email, nascimento)
             VALUES(:nome, :sobrenome, :endereco, :telefone, :email, :nascimento)";
         
-        $this->executaQueryComParametros($query, $registro);
+        $stmt = $pdo->prepare($query);
         
-        echo json_encode($registro);
-    }
-
-    protected function executaQueryComParametros($query, $registro, $chave = false, $isExclusao = false) {
-        $stmt = $this->pdo->prepare($query);
-    
-        if($chave){
-            $stmt->bindParam(':contato_id', $registro['id']);
-        }
-        
-        if(!$isExclusao){
-            $stmt = $this->setParametros($stmt, $registro);
-        }
-    
-        $stmt->execute();
-    
-        $stmt = null;
-        $pdo = null;
-    }
-    
-    protected function setParametros($stmt, $registro) {
         $stmt->bindParam(':nome', $registro['nome']);
         $stmt->bindParam(':sobrenome', $registro['sobrenome']);
         $stmt->bindParam(':endereco', $registro['endereco']);
@@ -105,7 +118,12 @@ class ManutencaoPadrao {
         $stmt->bindParam(':email', $registro['email']);
         $stmt->bindParam(':nascimento', $registro['nascimento']);
         
-        return $stmt;
+        $stmt->execute();
+        
+        $stmt = null;
+        $pdo = null;
+        
+        echo json_encode($registro);
     }
     
     protected function processaDados() {
@@ -132,13 +150,6 @@ class ManutencaoPadrao {
         } else {
             echo json_encode(array("mensagem" => "Funcao invalida!"));
         }
-    }
-    
-    protected function getSqlConsultaDados($chave = false){
-        if ($chave) {
-            return "SELECT * FROM `contato` WHERE contato_id = $chave";
-        }
-        return 'SELECT * FROM `contato`';
     }
     
 }
