@@ -54,7 +54,7 @@ class ManutencaoPadrao {
     protected function executaExclusao() {
         $registro = json_decode($_POST["contato"], true);
         
-        $query = "DELETE FROM `contato` WHERE `contato_id` = :contato_id";
+        $query = $this->getSqlExclusao();
     
         $this->executaQueryComParametros($query, $registro, $chave = true, $isExclusao = true);
     
@@ -64,7 +64,7 @@ class ManutencaoPadrao {
     protected function executaAlteracao() {
         $registro = json_decode($_POST["contato"], true);
 
-        $query = "UPDATE `contato` SET `nome` = :nome, `sobrenome` = :sobrenome, `endereco` = :endereco, `telefone` = :telefone, `email` = :email, `nascimento` = :nascimento WHERE `contato_id` = :contato_id";
+        $query = $this->getSqlAlteracao();
     
         $this->executaQueryComParametros($query, $registro, $chave = true);
         
@@ -74,8 +74,7 @@ class ManutencaoPadrao {
     protected function executaInclusao() {
         $registro = json_decode($_POST["contato"], true);
         
-        $query = "INSERT INTO `contato` (nome, sobrenome, endereco, telefone, email, nascimento)
-            VALUES(:nome, :sobrenome, :endereco, :telefone, :email, :nascimento)";
+        $query = $this->getSqlInclusao();
         
         $this->executaQueryComParametros($query, $registro);
         
@@ -142,5 +141,26 @@ class ManutencaoPadrao {
         }
         return 'SELECT * FROM `contato`';
     }
+    
+    protected function getSqlInclusao(){
+        return "INSERT INTO `contato` (nome, sobrenome, endereco, telefone, email, nascimento)
+            VALUES(:nome, :sobrenome, :endereco, :telefone, :email, :nascimento)";
+    }
+    
+    protected function getSqlAlteracao(){
+        return "UPDATE `contato` SET
+                       `nome` = :nome,
+                       `sobrenome` = :sobrenome,
+                       `endereco` = :endereco,
+                       `telefone` = :telefone,
+                       `email` = :email,
+                       `nascimento` = :nascimento
+                 WHERE `contato_id` = :contato_id";
+    }
+    
+    protected function getSqlExclusao(){
+        return "DELETE FROM `contato` WHERE `contato_id` = :contato_id";
+    }
+    
     
 }
