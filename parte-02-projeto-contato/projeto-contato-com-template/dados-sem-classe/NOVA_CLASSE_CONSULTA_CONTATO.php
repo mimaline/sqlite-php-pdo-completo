@@ -1,2 +1,0 @@
-<?php
-// AQUI VAI OS DADOS DA CONSULTA
