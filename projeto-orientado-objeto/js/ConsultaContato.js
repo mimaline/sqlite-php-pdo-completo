@@ -1,0 +1,4 @@
+
+class ConsultaContato extends ConsultaPadrao {
+
+}
