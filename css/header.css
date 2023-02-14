@@ -90,6 +90,11 @@ body {
     width:150px;
 }
 
+/*####################->CAPTION TABELA<-#####################*/
+caption {
+    background-color: var(--primary-color);
+}
+
 /*####################->FOOTER<-#####################*/
 .footer {
     width: 100vw;
