@@ -6,6 +6,11 @@
 ### Passar para alunos tentar adicionar orientacao a objetos na classe produto
 ### Passar para alunos tentar adicionar orientacao a objetos na classe venda
 ### Desenvolvimento de Relatorios com filtros- criar uma classe RelatorioPadrao
+* Criar sqls de consultas com e sem filtros para as seguintes telas
+  * Clientes
+  * Contatos
+  * Produtos
+  * Vendas
 
 ##16-02-2022 e 17-02-2022
 ## Finalizar Sistema com Relatorios
