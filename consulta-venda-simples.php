@@ -28,6 +28,7 @@ $html = '<!DOCTYPE html>
             <li><a href=\'ConsultaContato.php\'>Contatos</a></li>
             <li><a href=\'consulta-produto-simples.php\'>Produtos</a></li>
             <li><a href=\'consulta-venda-simples.php\'>Vendas</a></li>
+            <li><a href=\'RelatoriosHome.php\'>Relatorios</a></li>
             <!--<li>Config
                 <ul>
                     <li>Admin</li>

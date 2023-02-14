@@ -41,7 +41,6 @@ abstract class ManutencaoPadrao {
         $pdo = null;
     }
 
-
     protected function getDadosFromBancoDados($chave_id = false){
         /** @var PDO $pdo */
         $pdo = getConexao();

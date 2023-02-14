@@ -126,6 +126,7 @@ abstract class ConsultaPadrao {
                         <li><a href='ConsultaContato.php'>Contatos</a></li>
                         <li><a href='consulta-produto-simples.php'>Produtos</a></li>
                         <li><a href='consulta-venda-simples.php'>Vendas</a></li>
+                        <li><a href='RelatoriosHome.php'>Relatorios</a></li>
                         <!--<li>Config
                             <ul>
                                 <li>Admin</li>
@@ -143,10 +144,13 @@ abstract class ConsultaPadrao {
                     Copyright &copy; Prof. Gelvazio Camargo
                 </footer>
             </body>
-            
-            <script src="js/' . $this->getNomeTabela() . '.js" defer></script>
-            <script src="js/main.js" defer></script>
+            ' . $this->getScriptFooter() . '
             </html>';
+    }
+    
+    protected function getScriptFooter(){
+        return '<script src="js/' . $this->getNomeTabela() . '.js" defer></script>
+                <script src="js/main.js" defer></script>';
     }
 
 }
