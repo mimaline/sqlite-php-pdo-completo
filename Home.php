@@ -19,7 +19,7 @@ class Home extends ConsultaPadrao {
     }
     
     protected function getNomeTabela() {
-        return 'Bem vindo!<br> ao seu sistema de compras!';
+        return 'Bem vindo!<br> sistema de compras!';
     }
     
     protected function carregaDados1() {

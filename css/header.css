@@ -93,6 +93,7 @@ body {
 /*####################->CAPTION TABELA<-#####################*/
 caption {
     background-color: var(--primary-color);
+    text-transform: uppercase;
 }
 
 /*####################->FOOTER<-#####################*/
@@ -103,7 +104,7 @@ caption {
     position: fixed;
     bottom: 0;
     color: black;
-    font-size:12px;
+    font-size:22px;
     display: flex;
     justify-content: center;
     align-items: center;

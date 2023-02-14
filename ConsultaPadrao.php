@@ -139,7 +139,7 @@ abstract class ConsultaPadrao {
     
     protected function getFooter(){
         return '</main>
-                <footer>
+                <footer class="footer">
                     Copyright &copy; Prof. Gelvazio Camargo
                 </footer>
             </body>
