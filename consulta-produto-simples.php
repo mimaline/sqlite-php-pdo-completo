@@ -16,6 +16,7 @@ $html = '<!DOCTYPE html>
     <link rel="stylesheet" href="css/records.css">
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/header.css">
+    
     <script src="js/jquery.min.js" defer></script>
 
     <title>PRODUTO</title>
