@@ -3,7 +3,7 @@
 function getConexao(){
 
     try {
-        $pdo = new PDO('sqlite:db/contato.sqlite3');
+        $pdo = new PDO('sqlite:db/database.sqlite3');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
         echo $e->getMessage();
