@@ -169,10 +169,10 @@ class ConsultaPadrao {
         <td>${contato.email}</td>
         <td>${contato.nascimento}</td>
         <td>
-            <button type="button" class="button green" onclick="editarContato(${contato.contato_id})">Editar</button>
+            <button type="button" class="button green" onclick="consulta.editarContato(${contato.contato_id})">Editar</button>
         </td>
         <td>
-            <button type="button" class="button red" onclick="excluirContato(${contato.contato_id})">Excluir</button>
+            <button type="button" class="button red" onclick="consulta.excluirContato(${contato.contato_id})">Excluir</button>
         </td>
     `;
         document.querySelector('#tableDados>tbody').appendChild(newRow);

@@ -54,11 +54,9 @@ abstract class ManutencaoPadrao {
     }
 
     protected function buscaDadosAlteracao() {
-        $registro = json_decode($_POST[$this->getNomeTabela()], true);
-    
-        list($paramkey, $IdTabela) = $this->getChaves();
+        $registro = json_decode($_POST["dados"], true);
         
-        $chave = $registro[$IdTabela];
+        $chave = $registro["chave"];
         
         $aDados = $this->getDadosFromBancoDados($chave);
         
@@ -87,7 +85,7 @@ abstract class ManutencaoPadrao {
     }
     
     protected function executaExclusao() {
-        $registro = json_decode($_POST[$this->getNomeTabela()], true);
+        $registro = json_decode($_POST["dados"], true);
         
         $query = $this->getSqlExclusao();
     
@@ -97,17 +95,18 @@ abstract class ManutencaoPadrao {
     }
     
     protected function executaAlteracao() {
-        $registro = json_decode($_POST[$this->getNomeTabela()], true);
+        $registro = json_decode($_POST["dados"], true);
 
         $query = $this->getSqlAlteracao();
     
         $this->executaQueryComParametros($query, $registro, $chave = true);
         
-        echo json_encode($registro);
+        //echo json_encode($registro);
+        echo json_encode(array("post recebido" => json_encode($_POST)));
     }
     
     protected function executaInclusao() {
-        $registro = json_decode($_POST[$this->getNomeTabela()], true);
+        $registro = json_decode($_POST["dados"], true);
         
         $query = $this->getSqlInclusao();
         
@@ -120,9 +119,7 @@ abstract class ManutencaoPadrao {
         $stmt = $this->pdo->prepare($query);
     
         if($chave){
-            list($paramkey, $IdTabela) = $this->getChaves();
-            
-            $stmt->bindParam(':' . $paramkey, $registro[$IdTabela]);
+            $stmt->bindParam(':chave', $registro["chave"]);
         }
         
         if(!$isExclusao){
@@ -139,7 +136,7 @@ abstract class ManutencaoPadrao {
         if ($chave) {
             $nomeColunaChave = $this->getNomeColunaChave();
             
-            return "SELECT * FROM `" . $this->getNomeTabela() . "` WHERE " . $nomeColunaChave . " = :" . $nomeColunaChave;
+            return "SELECT " . $nomeColunaChave . " as chave, * FROM `" . $this->getNomeTabela() . "` WHERE " . $nomeColunaChave . " = $chave";
         }
         return "SELECT * FROM `" . $this->getNomeTabela() . "`";
     }
@@ -147,7 +144,7 @@ abstract class ManutencaoPadrao {
     protected function getSqlExclusao(){
         $nomeColunaChave = $this->getNomeColunaChave();
         
-        return "DELETE FROM `" . $this->getNomeTabela() . "` WHERE " . $nomeColunaChave ."= :" . $nomeColunaChave;
+        return "DELETE FROM `" . $this->getNomeTabela() . "` WHERE " . $nomeColunaChave ."= :chave";
     }
     
     protected function setParametros($stmt, $registro) {
@@ -194,9 +191,6 @@ abstract class ManutencaoPadrao {
     }
     
     protected function getSqlInclusao(){
-        // $sql_insert_original = "INSERT INTO `" . $this->getNomeTabela() . "` (nome, sobrenome, endereco, telefone, email, nascimento)
-        //     VALUES(:nome, :sobrenome, :endereco, :telefone, :email, :nascimento)";
-        
         $aColunas = $this->getColunasTabela();
         $aParametros = array();
         foreach ($aColunas as $campo){

@@ -1,8 +1,10 @@
 <?php
 
 require_once 'conexao.php';
-class ConsultaPadrao {
+abstract class ConsultaPadrao {
 
+    protected abstract function getTabelaConsulta();
+    
     public function __construct() {
         $this->processaDados();
     }
@@ -15,6 +17,10 @@ class ConsultaPadrao {
         $html_pagina .= $this->getFooter();
         
         echo $html_pagina;
+    }
+    
+    protected function getSqlConsultaDados(){
+        return 'SELECT * FROM `' . $this->getTabelaConsulta() . '`';
     }
     
     protected function getMain() {
@@ -108,7 +114,7 @@ class ConsultaPadrao {
                 $html_colunas_tabela .= "<td>$nascimento</td>";
                 
                 // Adiciona as acoes da tabela
-                $html_colunas_tabela .= $this->getAcoesContato($contato_id);
+                $html_colunas_tabela .= $this->getAcoesAlterarExcluir($contato_id);
                 
                 // finaliza linha
                 $html_colunas_tabela .= "</tr>";
@@ -121,23 +127,12 @@ class ConsultaPadrao {
         return $html_colunas_tabela;
     }
     
-    protected function getAcoesContato($contato_id){
-        // Lista de alteracoes
-        // 0 - Adicionar o header 'Ações'
-        // 1 - Adicionar a classe css de botao 'button.css' com a pasta de css
-        // 2 - Adicionar o codigo abaixo em cada linha
-        // 3 - Adicionar o codigo js de alteracao via ajax
-        // 4 - criar o arquivo "ajax_contato.php"
-        // 5 - Criar as acoes do ajax
-        // 6 - Criar a programacao via php de exclusao/alteracao
-        // 7 - Criar a programacao via php de inclusao de dados
-        
-        // Parte 2 - Adicionar o modal de insercao/alteracao
+    protected function getAcoesAlterarExcluir($chave){
         $html_acao = '<td>
-                        <button type="button" class="button green" onclick="editarContato(' . $contato_id . ')">Editar</button>
+                        <button type="button" class="button green" onclick="editarRegistro(\'' . $this->getTabelaConsulta() . '\',' . $chave . ')">Editar</button>
                    </td>
                    <td>
-                        <button type="button" class="button red" onclick="excluirContato(' . $contato_id . ')">Excluir</button>
+                        <button type="button" class="button red" onclick="excluirRegistro(\'' . $this->getTabelaConsulta() . '\',' . $chave . ')">Excluir</button>
                     </td>';
         
         return $html_acao;
@@ -161,10 +156,7 @@ class ConsultaPadrao {
     <link rel=\"stylesheet\" href=\"css/modal.css\">
     <link rel=\"icon\" href=\"images/favicon-1.png\">
     <script src=\"js/jquery.min.js\" defer></script>
-    
-    <script src=\"js/jquery.min.js\" defer></script>
-    <!-- <script src=\"js/ConsultaPadrao.js\" defer></script> -->
-    
+    <script src=\"js/ConsultaPadrao.js\" defer></script>
 
     <title>" . $this->getTituloConsulta() . "</title>
 </head>
@@ -317,7 +309,7 @@ class ConsultaPadrao {
     }
     
     protected function getScripsJavaScript(){
-        return "<script src=\"js/ConsultaContato.js\" defer></script>";
+        return "<script src=\"js/ConsultaPadrao.js\" defer></script>";
     }
     
     protected function getAcoesInclusao(){
@@ -326,9 +318,9 @@ class ConsultaPadrao {
                     <h1 class="header-title">' . $this->getTituloConsulta() . '</h1>
                 </header>
                 <section class="acoes">
-                    <button type="button" class="button blue mobile" id="cadastrarCliente">Incluir</button>
-                    <button type="button" class="button green" id="consultarDadosCliente">Consultar</button>
-                    <button type="button" class="button red" id="limparDadosCliente">Limpar Consulta</button>
+                    <button type="button" class="button blue mobile" id="incluirRegistro">Incluir</button>
+                    <button type="button" class="button green" id="consultarDados">Consultar</button>
+                    <button type="button" class="button red" id="limparConsulta">Limpar Consulta</button>
                 </section>
             ';
     }
@@ -367,9 +359,5 @@ class ConsultaPadrao {
     
     protected function getTituloConsulta(){
         return 'TITULO DA CONSULTA INDEFINIDO!';
-    }
-    
-    protected function getSqlConsultaDados(){
-        return 'SELECT * FROM `contato`';
     }
 }
