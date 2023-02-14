@@ -119,10 +119,6 @@ function loadAjaxConsulta (tabela){
 }
 
 function objectToArray (oDados) {
-    oDados.each(myObj, function (idx, obj) {
-        objArr.push([obj.id, obj.nome, obj.cpf]);
-    });
-
     let aNovoArray = new Array();
     oDados.forEach(function(elemento, index, objeto){
         aNovoArray.push([obj.id, obj.nome, obj.cpf]);
