@@ -155,9 +155,9 @@ abstract class ConsultaPadrao {
                         <li><a href='Home.php'>Home</a></li>
                         <li><a href='ConsultaCliente.php'>Clientes</a></li>
                         <li><a href='ConsultaContato.php'>Contatos</a></li>
-                        <li><a href='consulta-produto-simples.php'>Produtos</a></li>
+                        <!--<li><a href='consulta-produto-simples.php'>Produtos</a></li>
                         <li><a href='consulta-venda-simples.php'>Vendas</a></li>
-                        <!--<li>Config
+                        <li>Config
                             <ul>
                                 <li>Admin</li>
                                 <li>Usuarios</li>
