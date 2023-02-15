@@ -17,7 +17,7 @@ abstract class ManutencaoPadrao {
 
     protected function executaConsulta(){
         $aDados = $this->getDadosFromBancoDados();
-
+        
         echo json_encode($aDados);
     }
 
@@ -109,7 +109,13 @@ abstract class ManutencaoPadrao {
             } else if($operador == "menor"){
                 $operador = "<";
             } else if($operador == "igual"){
-                $operador = "=";
+                // Se for a chave e um campo inteiro
+                if($campo == $this->getNomeColunaChave()){
+                    $operador = "=";
+                } else {
+                    $operador = " like ";
+                    $valor = "'%" . $valor . "%'";
+                }
             }
     
             $query = "SELECT * FROM `" . $this->getNomeTabela() . "` WHERE " . $campo . $operador . $valor;
