@@ -97,13 +97,26 @@ abstract class ManutencaoPadrao {
             
             return $query;
         }
-        
+
         $campo    = isset($_POST["campo"]) ? $_POST["campo"] : false;
         $operador = isset($_POST["operador"]) ? $_POST["operador"] : false;
         $valor    = isset($_POST["valor"]) ? $_POST["valor"] : false;
     
         $query = "SELECT * FROM `" . $this->getNomeTabela() . "`";
         if ($campo && $operador && $valor){
+
+            if($campo == $this->getNomeColunaChave()){
+                // Transforma o valor para inteiro
+                $valor = (int)$valor;
+
+                // Corrigi o erro de valor de texto em campo numerico
+                if($valor == 0){
+                    // Invalida a consulta, mas nao da erro
+                    $valor = -1;
+                    $operador = "menor";
+                }
+            }
+
             if($operador == "maior"){
                 $operador = ">";
             } else if($operador == "menor"){
