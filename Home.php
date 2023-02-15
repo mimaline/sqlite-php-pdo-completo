@@ -2,6 +2,7 @@
 
 require_once ("ConsultaPadrao.php");
 class Home extends ConsultaPadrao {
+    
     protected function getColunasTabela() {
         // TODO: Implement getColunasTabela() method.
     }
@@ -22,10 +23,13 @@ class Home extends ConsultaPadrao {
         return 'Bem vindo!<br> sistema de compras!';
     }
     
-    protected function carregaDados1() {
+    protected function getColunasConsultaTabela() {
+        // TODO: Implement getColunasConsultaTabela() method.
+    }
+
+    protected function getFiltrosConsulta() {
         return "";
     }
-    
 }
 
 new Home();

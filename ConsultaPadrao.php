@@ -158,21 +158,43 @@ abstract class ConsultaPadrao {
         $aListaOpcoes = "";
         
         foreach ($this->getColunasConsultaTabela() as $opcao){
-            $aListaOpcoes .= "<option value='" . $opcao . "'>" . $opcao . "</option>";
+            $aListaOpcoes .= "<option style='color: black;' value='" . $opcao . "'>" . $opcao . "</option>";
         }
         
-        return '<section class="acoes">
+        return '<style>
+                    select {
+                        width: 85%;
+                        height: 40px;
+                        border-radius: 5px;
+                        background-color: var(--primary-color);
+                        font-size: 15px;
+                        text-transform: uppercase;
+                    }
+                    
+                    select > option {
+                        padding: 5px;
+                    }
+                
+                    select  option {
+                        font-size: 18px;
+                    }
+                    
+                    button {
+                        border-radius: 5px;
+                    }
+                </style>
+                <section class="acoes">
                     <select name="campo" id="campo">
                         ' . $aListaOpcoes . '
                     </select>
                     <select name="operador" id="operador">
-                        <option value="maior">Maior</option>
+                        <option value="maior" selected>Maior</option>
                         <option value="menor">Menor</option>
                         <option value="igual">Igual</option>
                     </select>
-                    <input type="text" id="valor" name="valor" placeholder="Informe o filtro...">
+                    <input style="width: 200px;" type="text" id="valor" name="valor" placeholder="Informe o filtro...">
                     <button type="button" class="button green" id="consultarDados">Consultar</button>
-                    <button type="button" class="button red" id="limparDados">Limpar Consulta</button>
+                    <button type="button" class="button red" id="limparDados">Limpar</button>
                 </section>';
     }
 }
