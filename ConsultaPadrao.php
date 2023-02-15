@@ -9,7 +9,14 @@ abstract class ConsultaPadrao {
     protected abstract function getColunasConsultaTabela();
 
     public function __construct(){
+        $validaLogin = false;
+        
         $this->carregaDados();
+        
+        if(!$validaLogin){
+            sleep(3);
+            echo '<script>openModalLogin()</script>';
+        }
     }
 
     protected function getNomeTabela(){
