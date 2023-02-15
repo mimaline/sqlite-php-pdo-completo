@@ -105,9 +105,31 @@ abstract class ConsultaPadrao {
 
         $html_tabela .= $this->getModalDados();
         
+        $html_tabela .= $this->getModalLogin();
+        
         $html_tabela .= $this->getFooter();
 
         echo $html_tabela;
+    }
+    
+    protected function getModalLogin(){
+        return '<div class="modal" id="modal-login">
+                    <div class="modal-content" style="width: 40%">
+                        <header class="modal-header">
+                            <h2>Login</h2>
+                            <span class="modal-close" id="modalCloseLogin">&#10006;</span>
+                        </header>
+                        <form id="form" class="modal-form" style="justify-content: center;">
+                            <input type="email" id="email" class="modal-field" placeholder="E-mail..." required value="gelvazio@email.com">
+                            
+                            <input type="password" id="senha" class="modal-field" placeholder="Senha..." required value="123456">
+                        </form>
+                        <footer class="modal-footer" id="modal-footer-login" style="width: 100%">
+                            <button id="salvarLogin" class="button green">Salvar</button>
+                            <button id="cancelarLogin" class="button blue">Cancelar</button>
+                        </footer>
+                    </div>
+                </div>';
     }
     
     protected function getAcoesInclusao(){
@@ -151,6 +173,7 @@ abstract class ConsultaPadrao {
     
     protected function getScriptFooter(){
         return '<script src="js/' . $this->getNomeTabela() . '.js" defer></script>
+                <script src="js/login.js" defer></script>
                 <script src="js/main.js" defer></script>';
     }
     
@@ -161,29 +184,30 @@ abstract class ConsultaPadrao {
             $aListaOpcoes .= "<option style='color: black;' value='" . $opcao . "'>" . $opcao . "</option>";
         }
         
-        return '<style>
-                    select {
-                        width: 85%;
-                        height: 40px;
-                        border-radius: 5px;
-                        background-color: var(--primary-color);
-                        font-size: 15px;
-                        text-transform: uppercase;
-                    }
-                    
-                    select > option {
-                        padding: 5px;
-                    }
+        return '
+            <style>
+                select {
+                    width: 85%;
+                    height: 40px;
+                    border-radius: 5px;
+                    background-color: var(--primary-color);
+                    font-size: 15px;
+                    text-transform: uppercase;
+                }
                 
-                    select  option {
-                        font-size: 18px;
-                    }
-                    
-                    button {
-                        border-radius: 5px;
-                    }
-                </style>
-                <section class="acoes">
+                select > option {
+                    padding: 5px;
+                }
+            
+                select  option {
+                    font-size: 18px;
+                }
+                
+                button {
+                    border-radius: 5px;
+                }
+            </style>
+            <section class="acoes">
                     <select name="campo" id="campo">
                         ' . $aListaOpcoes . '
                     </select>
@@ -195,6 +219,7 @@ abstract class ConsultaPadrao {
                     <input style="width: 200px;" type="text" id="valor" name="valor" placeholder="Informe o filtro...">
                     <button type="button" class="button green" id="consultarDados">Consultar</button>
                     <button type="button" class="button red" id="limparDados">Limpar</button>
+                    <button type="button" class="button green" id="loginSistema">Login</button>
                 </section>';
     }
 }
