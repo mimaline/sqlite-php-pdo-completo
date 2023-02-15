@@ -92,6 +92,7 @@ class ConsultaCliente extends ConsultaPadrao {
         return $html_tabela;
     }
     
+    // NOVA PROGRAMACAO FILTROS
     protected function getColunasConsultaTabela(){
         return array("cliente_id", "nome", "telefone", "email", "cidade");
     }
