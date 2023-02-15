@@ -28,11 +28,11 @@ class ManutencaoCliente extends ManutencaoPadrao {
         /** @var PDO $pdo */
         $pdo = getConexao();
 
-        $query = "UPDATE `cliente` SET 
-                     `nome`     = :nome, 
-                     `telefone` = :telefone, 
-                     `email`    = :email, 
-                     `cidade`   = :cidade 
+        $query = "UPDATE `cliente` SET
+                     `nome`     = :nome,
+                     `telefone` = :telefone,
+                     `email`    = :email,
+                     `cidade`   = :cidade
              WHERE `cliente_id` = :cliente_id";
 
         $stmt = $pdo->prepare($query);
@@ -58,7 +58,7 @@ class ManutencaoCliente extends ManutencaoPadrao {
         /** @var PDO $pdo */
         $pdo = getConexao();
 
-        $query = "INSERT INTO `cliente` (nome, telefone, email, cidade) 
+        $query = "INSERT INTO `cliente` (nome, telefone, email, cidade)
                     VALUES (:nome, :telefone, :email, :cidade)";
 
         $stmt = $pdo->prepare($query);
@@ -75,6 +75,7 @@ class ManutencaoCliente extends ManutencaoPadrao {
 
         echo json_encode($registro);
     }
+  
 }
 
 // linhas 123

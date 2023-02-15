@@ -47,11 +47,11 @@ class ConsultaCliente extends ConsultaPadrao {
 
     protected function getAcoesCliente($cliente_id) {
         $html_acao = '<td>
-                        <button type="button" class="button green" 
+                        <button type="button" class="button green"
                             onclick="editarCliente(' . $cliente_id . ')">Editar</button>
                    </td>
                    <td>
-                        <button type="button" class="button red" 
+                        <button type="button" class="button red"
                             onclick="excluirCliente(' . $cliente_id . ')">Excluir</button>
                     </td>';
 
@@ -90,6 +90,10 @@ class ConsultaCliente extends ConsultaPadrao {
         $html_tabela .= "    <th colspan='2'>Ações</th>";
 
         return $html_tabela;
+    }
+    
+    protected function getColunasConsultaTabela(){
+        return array("cliente_id", "nome", "telefone", "email", "cidade");
     }
 }
 // 189 linhas - inicio

@@ -6,6 +6,7 @@ abstract class ConsultaPadrao {
     protected abstract function getColunasTabela();
     protected abstract function getModalDados();
     protected abstract function getColunasCabecalhoTabela();
+    protected abstract function getColunasConsultaTabela();
 
     public function __construct(){
         $this->carregaDados();
@@ -20,7 +21,7 @@ abstract class ConsultaPadrao {
         $pdo = getConexao();
 
         $query = "SELECT * FROM `" . $this->getNomeTabela() . "`";
-
+        
         $stmt = $pdo->prepare($query);
 
         $stmt->execute();
@@ -71,6 +72,9 @@ abstract class ConsultaPadrao {
         $html_tabela .= "<main>";
         
         $html_tabela .= "<hr>";
+        
+        $html_tabela .= $this->getFiltrosConsulta();
+        
         $html_tabela .= $this->getAcoesInclusao();
 
         // Lista de Contatos em HTML com os dados do banco de dados(tabela html)
@@ -109,8 +113,6 @@ abstract class ConsultaPadrao {
     protected function getAcoesInclusao(){
         return '<section class="acoes">
                     <button type="button" class="button blue mobile" id="incluirDados">Incluir</button>
-                    <button type="button" class="button green" id="consultarDados">Consultar</button>
-                    <button type="button" class="button red" id="limparDados">Limpar Consulta</button>
                 </section>';
     }
     
@@ -126,7 +128,6 @@ abstract class ConsultaPadrao {
                         <li><a href='ConsultaContato.php'>Contatos</a></li>
                         <li><a href='consulta-produto-simples.php'>Produtos</a></li>
                         <li><a href='consulta-venda-simples.php'>Vendas</a></li>
-                        <li><a href='RelatoriosHome.php'>Relatorios</a></li>
                         <!--<li>Config
                             <ul>
                                 <li>Admin</li>
@@ -152,5 +153,26 @@ abstract class ConsultaPadrao {
         return '<script src="js/' . $this->getNomeTabela() . '.js" defer></script>
                 <script src="js/main.js" defer></script>';
     }
-
+    
+    protected function getFiltrosConsulta(){
+        $aListaOpcoes = "";
+        
+        foreach ($this->getColunasConsultaTabela() as $opcao){
+            $aListaOpcoes .= "<option value='" . $opcao . "'>" . $opcao . "</option>";
+        }
+        
+        return '<section class="acoes">
+                    <select name="campo" id="campo">
+                        ' . $aListaOpcoes . '
+                    </select>
+                    <select name="operador" id="operador">
+                        <option value="maior">Maior</option>
+                        <option value="menor">Menor</option>
+                        <option value="igual">Igual</option>
+                    </select>
+                    <input type="text" id="valor" name="valor" placeholder="Informe o filtro...">
+                    <button type="button" class="button green" id="consultarDados">Consultar</button>
+                    <button type="button" class="button red" id="limparDados">Limpar Consulta</button>
+                </section>';
+    }
 }

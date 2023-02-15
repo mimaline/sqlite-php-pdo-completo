@@ -120,16 +120,22 @@ function loadAjaxUpdateRegistro (oDadosContato, acao){
 }
 
 function loadAjaxConsulta (){
-    var oDados = {"acao":"EXECUTA_CONSULTA"};
+    var oDados = {
+        "acao"    : "EXECUTA_CONSULTA",
+        "campo"   : document.querySelector("#campo").value,
+        "operador": document.querySelector("#operador").value,
+        "valor"   : document.querySelector("#valor").value
+    };
+
     $.ajax({
         url:"ajax_contato_aula.php",
         type:"POST",
         async:true,
         data: oDados,
         success:function(response){
-            const aDados = JSON.parse(response);
+            console.log("Retorno Consulta(AJAX):" + JSON.stringify(response));
 
-            console.log("Retorno Consulta(AJAX):" + JSON.stringify(aDados));
+            const aDados = JSON.parse(response);
 
             clearTable();
 

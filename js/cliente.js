@@ -1,8 +1,8 @@
 function excluirCliente(cliente_id){
     console.log('cliente id:' + cliente_id);
-    
+
 	alert("Excluindo registro...");
-	
+
     const cliente = {
         cliente_id: cliente_id
     };
@@ -29,16 +29,24 @@ function loadAjaxUpdateRegistro (oDados, acao){
 }
 
 function loadAjaxConsulta(){
-    var oDados = {"acao":"EXECUTA_CONSULTA"};
+    var oDados = {
+            "acao"    : "EXECUTA_CONSULTA",
+            "campo"   : document.querySelector("#campo").value,
+            "operador": document.querySelector("#operador").value,
+            "valor"   : document.querySelector("#valor").value
+        };
+
     $.ajax({
         url:"ajax_cliente_aula.php",
         type:"POST",
         async:true,
         data: oDados,
         success:function(response){
+
+            console.log("Retorno Consulta(AJAX):" + JSON.stringify(response));
+
             const aDados = JSON.parse(response);
 
-            console.log("Retorno Consulta(AJAX):" + JSON.stringify(aDados));
 
             clearTable();
 
